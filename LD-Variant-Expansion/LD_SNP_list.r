@@ -38,7 +38,7 @@ get_ld <- function(rsid) {
       }
     
     res %>%
-      select(-matches("population|n_")) %>%
+      select(-matches("population_name")) %>%  #removes population column 
       mutate(index_snp = rsid)
     
   }, error = function(e) {
