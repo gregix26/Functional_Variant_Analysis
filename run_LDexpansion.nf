@@ -8,8 +8,7 @@ process LD_EXPANSION {
     
     publishDir "${params.outdir}", mode: 'copy'
     
-    conda 'bioconda::r-base conda-forge::r-dplyr conda-forge::r-readr conda-forge::r-purrr bioconda::r-ensemblqueryr'
-    
+
     input:
     path input_csv
 
@@ -20,7 +19,7 @@ process LD_EXPANSION {
     script:
     """
     mkdir -p ld_results
-    Rscript ${projectDir}/scripts/Functional_Variant_Analysis/LD-Variant-Expansion/LD_SNP_list.R ${input_csv} ld_results
+    Rscript ${projectDir}/LD-Variant-Expansion/LD_SNP_list.r ${input_csv} ld_results
     """
 }
 
