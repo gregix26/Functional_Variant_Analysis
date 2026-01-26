@@ -5,3 +5,6 @@ Step 1: Capturing LD windows
 
 This script reads in a csv of rsIDs, loops them safely to create LD windows and capture SNPs in high LD and then writes one LD file per SNP of Interest. 
 
+To only run LD expansion step: 
+
+nextflow run run_LDexpansion.nf --input /path/to/your/snps.csv --outdir /path/to/output/
