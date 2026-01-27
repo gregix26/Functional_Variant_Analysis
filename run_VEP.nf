@@ -41,8 +41,8 @@ process MAKE_VCFS {
     echo "CSV files in ld_results:"
     ls -la ld_results/
     
-    # Run the FIXED R script
-    Rscript ${projectDir}/Functional-Annotation-VEP/convert_csvtovcf_fixed.R
+    # Run the ROBUST R script with mirror fallbacks
+    Rscript ${projectDir}/Functional-Annotation-VEP/convert_csvtovcf_robust.R
     
     # List VCFs created
     echo "VCFs created:"

@@ -10,5 +10,10 @@ docker run --rm \
   ensemblorg/ensembl-vep \
   vep --help | head
 
+Then add execute permission to run_VEP.sh script with chmod +x  
+
 The following packages also need to be installed for this step to work properly: 
 biomaRt, data.table
+
+
+In case ensembl server is down --> use convert_csvtovcf_robust.R script to connect to any of the servers
