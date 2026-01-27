@@ -37,7 +37,7 @@ for (mirror in mirrors) {
     ensembl <- useEnsembl(
       biomart = "snp",
       dataset = "hsapiens_snp", 
-      GRCh = 37,
+      GRCh = 38,
       mirror = mirror
     )
     cat("Successfully connected to Ensembl via", mirror, "\n")
@@ -66,7 +66,7 @@ if (is.null(ensembl)) {
       # Create minimal VCF with placeholder coordinates
       vcf_content <- c(
         "##fileformat=VCFv4.2",
-        "##reference=GRCh37", 
+        "##reference=GRCh38", 
         "##INFO=<ID=RS,Number=1,Type=String,Description=\"dbSNP ID\">",
         "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO",
         paste0("1\t", 100000 + i, "\t", snp, "\tA\tT\t.\tPASS\tRS=", snp)
@@ -103,7 +103,7 @@ if (is.null(ensembl)) {
 
     header <- c(
       "##fileformat=VCFv4.2",
-      "##reference=GRCh37",
+      "##reference=GRCh38",
       "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO"
     )
 

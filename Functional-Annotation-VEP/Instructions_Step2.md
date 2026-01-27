@@ -19,3 +19,8 @@ biomaRt, data.table
 In case ensembl server is down --> use convert_csvtovcf_robust.R script to connect to any of the servers
 In case there is an issue with the vep cache --> download homosapiens ref dataset manually from https://ftp.ensembl.org/pub/release-115/variation/indexed_vep_cache/
 
+## Command to run this step 
+nextflow run run_VEP.nf -resume --csvs "/home/law22/data/LIV/Functional_Variant/Test/ld_results/*.csv" --vcf_out "/home/law22/data/LIV/Functional_Variant/Test/ld_results/vcfs" --vep_out "/home/law22/data/LIV/Functional_Variant/Test/results_vep" --vep_cache "/home/law22/data/LIV/scripts/ensembl-vep"
+
+
+
