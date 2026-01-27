@@ -17,3 +17,5 @@ biomaRt, data.table
 
 
 In case ensembl server is down --> use convert_csvtovcf_robust.R script to connect to any of the servers
+In case there is an issue with the vep cache --> download homosapiens ref dataset manually from https://ftp.ensembl.org/pub/release-115/variation/indexed_vep_cache/
+
