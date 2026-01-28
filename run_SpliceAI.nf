@@ -27,7 +27,7 @@ process RUN_SPLICEAI {
 
     script:
     """
-    ${projectDir}/Functional-Annotation-SpliceAI/run_SpliceAI.sh \\
+    ${projectDir}/Functional-Annotation-VEP/run_SpliceAI.sh \\
         ${vcf} \\
         ${vcf.simpleName}.spliceai.vcf \\
         ${params.genome_fa}
