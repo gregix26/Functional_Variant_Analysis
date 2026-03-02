@@ -34,7 +34,9 @@ nextflow run filter_VEP.nf
 
 ## To select for particular variants and make a new directory with just those variants (for example, a subset of variants to run spliceAI on)
 
-./filter_for_spliceai.sh /home/kg522/data/Functional-Variants/spliceIA_input/control/control_splicing_variants.csv /home/kg522/data/Functional-Variants/vep_control_260226 /home/kg522/data/Functional-Variants/spliceai_control_vcf
+This needs an input csv file of Lead SNP and high LD SNP coordinates compiled in a csv file (the code reads from these to find those vcf files)
+
+./filter_for_variants_vcf.sh <csv_file> <input_vcf_dir> <output_base_dir>
 
 # On filtered splice variants, run SpliceAI
 
