@@ -10,7 +10,7 @@ In a second step, variants (SNP list) are mapped to genes, transcripts and regul
 ## Step 3: Molecular Impact Prediction 
 SpliceAI is used to predict splicing effects of variants under investigation. SpliceAI predicts change in splicing probabilities at each base in a sequence window of +/- 500kb. 
 
-For non-coding variants, the a score of "importance" is added via LINSIGHT, a database of precalculated scores informing pressures of negative selection on non-coding sequences. For this, selected non-coding variants need to be reannotated in VEP with hg19 build. 
+For non-coding variants, the a score of "importance" is added via LINSIGHT, a database of precalculated scores informing pressures of negative selection on non-coding sequences. For this, selected non-coding variants need to be reannotated in VEP with hg19 build. Download precalculated scores: http://compgen.cshl.edu/LINSIGHT/LINSIGHT.bw You will also need to install pyBigWig (recommended to run in separate Python environment).
 
 For non-coding and regulatory variants, csv files of VEP results need to be converted into bed files. Using ATAC-seq, Hi-C or other epigenetic data, functional variants can be weeded out by overlaying epigenetic data over the variants. Open chromatin = possible functional role. 
 
