@@ -1,8 +1,6 @@
 #!/bin/bash
-
 # Usage: ./filter_vcfs.sh <csv_file> <input_vcf_dir> <output_base_dir>
 # CSV should have columns: Lead_SNP, Uploaded_variation
-
 set -e  # Exit on error
 
 if [ "$#" -ne 3 ]; then
@@ -37,38 +35,30 @@ echo ""
 
 # Skip header line and process each row
 tail -n +2 "$CSV_FILE" | while IFS=',' read -r lead_snp uploaded_variation rest; do
-    
     # Remove quotes and whitespace
     lead_snp=$(echo "$lead_snp" | tr -d '"' | tr -d ' ')
     uploaded_variation=$(echo "$uploaded_variation" | tr -d '"' | tr -d ' ')
-    
+
     echo "Processing: Lead_SNP=$lead_snp, Uploaded_variation=$uploaded_variation"
-    
+
     # Create output directory structure: output_base/Lead_SNP/Uploaded_variation/
     OUTPUT_DIR="$OUTPUT_BASE_DIR/$lead_snp/$uploaded_variation"
     mkdir -p "$OUTPUT_DIR"
-    
+
     # Find all VCF files in input directory (including subdirectories)
     find "$INPUT_VCF_DIR" -type f \( -name "*.vcf" -o -name "*.vcf.gz" \) | while read -r vcf_file; do
-        
         vcf_basename=$(basename "$vcf_file")
         output_vcf="$OUTPUT_DIR/$vcf_basename"
-        
-            # Search in uncompressed VCF
-            if grep -q "$lead_snp" "$vcf_file" && grep -q "$uploaded_variation" "$vcf_file"; then
-                echo "  Found both variants in: $vcf_basename"
-                
-                # Extract header and matching lines
-                {
-                    grep "^#" "$vcf_file"
-                    grep -E "$lead_snp|$uploaded_variation" "$vcf_file"
-                } > "$output_vcf"
-                
-                echo "    Saved to: $output_vcf"
-            fi
-        
+
+        # Check if both variants are present in the VCF file
+        if grep -q "$uploaded_variation" "$vcf_file"; then
+            echo "  Found variants in: $vcf_basename"
+            # Copy the entire VCF file
+            cp "$vcf_file" "$output_vcf"
+            echo "    Copied to: $output_vcf"
+        fi
     done
-    
+
     echo ""
 done
 
