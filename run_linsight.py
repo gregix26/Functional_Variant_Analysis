@@ -18,7 +18,6 @@ bw = pyBigWig.open(BIGWIG)
 def get_linsight_score(location):
     try:
         chrom, coords = str(location).split(':')
-        chrom = 'chr' + chrom
         pos_parts = coords.split('-')
         start = int(pos_parts[0]) - 1
         end = int(pos_parts[-1])
@@ -27,7 +26,7 @@ def get_linsight_score(location):
         return max(valid) if valid else None
     except Exception:
         return None
-
+        
 # --- Apply scores ---
 df['LINSIGHT'] = df['Location'].apply(get_linsight_score)
 print(f"Scored variants. NaN count: {df['LINSIGHT'].isna().sum()}")
