@@ -17,6 +17,22 @@ biomaRt, data.table
 In case ensembl server is down --> use convert_csvtovcf_robust.R script to connect to any of the servers
 In case there is an issue with the vep cache --> download homosapiens ref dataset (hg38) manually from https://ftp.ensembl.org/pub/release-115/variation/indexed_vep_cache/ (no need to install VEP itself)
 
+For plugins, comb through the exhaustive list on https://www.ensembl.org/info/docs/tools/vep/script/vep_plugins.html
+
+Follow instructions to install modules. In short, you have to download the VEP pm file from https://github.com/Ensembl/VEP_plugins/tree/release/115 and store it in ensembl-vep under a new directory. For each plugin, there are other additional files to download. Use wget to clone them into a new directory (vep_plugin_data) in ensembl-vep. The path to the plugins and plugin data is specified in the Nextflow scrict. For new plugins, add --filter [plugin_name] to Docker command in VEP.sh 
+
+For some plugin, you have to edit their pm file to specify the specify the feature type for the plugin to investigat. The choice depends what the plugin does. This will cause your plugin to handle any variation features that overlap transcripts or intergenic regions. For example, for plugins for coding variants:
+
+sub feature_types {
+    return ['Transcript';
+}
+
+To also include any regulatory features, you should use the generic type "Feature":
+
+sub feature_types {
+    return ['Feature', 'Intergenic'];
+}
+
 ## Command to run VEP - gives you an output directory with lead SNP subdirectory and all their high LD SNPs and their VEP results in tab columns 
 nextflow run run_VEP.nf 
 --csvs '/home/kg522/data/Functional-Variants/LD_Expansion_Results/full_dataset/ld_results/*.csv' 
