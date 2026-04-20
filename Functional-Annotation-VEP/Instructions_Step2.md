@@ -36,7 +36,7 @@ sub feature_types {
 }
 
 ## Command to run VEP - gives you an output directory with lead SNP subdirectory and all their high LD SNPs and their VEP results in tab columns 
-# For hg19, change the reference genome under the Docker command - keep in mind that most plugins do not work with hg19!
+### For hg19, change the reference genome under the Docker command - keep in mind that most plugins do not work with hg19!
 nextflow run run_VEP.nf 
 --csvs '/home/kg522/data/Functional-Variants/LD_Expansion_Results/full_dataset/ld_results/*.csv' 
 --vcf_out /home/kg522/data/Functional-Variants/LD_Expansion_Results/case_vcfs 
