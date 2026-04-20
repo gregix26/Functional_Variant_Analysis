@@ -14,8 +14,10 @@ Then add execute permission to run_VEP.sh and run_SpliceAI.sh script with chmod 
 The following packages also need to be installed for this step to work properly: 
 biomaRt, data.table
 
-In case ensembl server is down --> use convert_csvtovcf_robust.R script to connect to any of the servers
+In case ensembl server is down --> use biomaRt_csvtovcf_hg38.R script to connect to any of the servers
 In case there is an issue with the vep cache --> download homosapiens ref dataset (hg38) manually from https://ftp.ensembl.org/pub/release-115/variation/indexed_vep_cache/ (no need to install VEP itself)
+
+For hg19, server is much slower, download human SNP VCF files locally (https://ftp.ncbi.nih.gov/snp/organisms/human_9606_b151_GRCh37p13/VCF/00-All.vcf.gz and the .tbi files) and search the location coordinates with dsSNP_hg19_csvtovcf.R
 
 For plugins, comb through the exhaustive list on https://www.ensembl.org/info/docs/tools/vep/script/vep_plugins.html
 
@@ -34,6 +36,7 @@ sub feature_types {
 }
 
 ## Command to run VEP - gives you an output directory with lead SNP subdirectory and all their high LD SNPs and their VEP results in tab columns 
+# For hg19, change the reference genome under the Docker command - keep in mind that most plugins do not work with hg19!
 nextflow run run_VEP.nf 
 --csvs '/home/kg522/data/Functional-Variants/LD_Expansion_Results/full_dataset/ld_results/*.csv' 
 --vcf_out /home/kg522/data/Functional-Variants/LD_Expansion_Results/case_vcfs 
