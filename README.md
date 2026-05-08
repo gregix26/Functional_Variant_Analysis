@@ -14,6 +14,5 @@ Incorporate in-house or external dataset - ATAC, ChiP, Hi-C, etc.
 ## Step 5: Multi-evidence filtering 
 Gather evidence and score variants.
 
-<img width="4288" height="3426" alt="image" src="https://github.com/user-attachments/assets/d6027cc5-c6cc-4500-b766-c8e9c3169c1e" />
 
 
