@@ -1,3 +1,6 @@
+# Filtering for specific variants, biotype, variant class, etc.
+# Change --filter to whatever
+
 nextflow.enable.dsl=2
 
 params.tsv_dir = "VEP_controls"
