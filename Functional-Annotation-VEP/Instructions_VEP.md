@@ -1,7 +1,18 @@
 # Run VEP as an initial step of functional annotation 
 
-First, the VEP cache has to be downloaded: 
-git clone https://github.com/Ensembl/ensembl-vep.git
+## STEP 1: Expanding the list of SNPs
+Usage: nextflow run run_LDexpansion.nf --input /path/to/your/snps.csv --outdir /path/to/output/
+
+- Uses ensemblLD (1000G phase 3) in poulation-specific manner (EUR)
+- r^2 threshold explicitly defined as 0.7
+- window-based LD expansion (500kb)
+
+This script reads in a csv of rsIDs, loops them safely to create LD windows and capture SNPs in high LD and then writes one LD file per SNP of Interest (one file for lead SNP and its high LD SNPs).
+
+Dependencies: conda-forge, bioconda, dplyr, readr, purr, remotes, libxml2 and xml2, ensemblQueryR (remotes::install_github("ainefairbrother/ensemblQueryR"))
+
+## VEP setup
+First, the VEP cache has to be downloaded: git clone https://github.com/Ensembl/ensembl-vep.git
 
 To test that VEP is properly installed and working, run the following command in the ensmbl-vep folder: 
 docker run --rm \
@@ -11,13 +22,13 @@ docker run --rm \
 
 Then add execute permission to run_VEP.sh and run_SpliceAI.sh script with chmod +x  
 
-The following packages also need to be installed for this step to work properly: 
+Dependencies: 
 biomaRt, data.table
 
 In case ensembl server is down --> use biomaRt_csvtovcf_hg38.R script to connect to any of the servers
-In case there is an issue with the vep cache --> download homosapiens ref dataset (hg38) manually from https://ftp.ensembl.org/pub/release-115/variation/indexed_vep_cache/ (no need to install VEP itself)
-
 For hg19, server is much slower, download human SNP VCF files locally (https://ftp.ncbi.nih.gov/snp/organisms/human_9606_b151_GRCh37p13/VCF/00-All.vcf.gz and the .tbi files) and search the location coordinates with dsSNP_hg19_csvtovcf.R
+
+In case there is an issue with the vep cache --> download homosapiens ref dataset (hg38) manually from https://ftp.ensembl.org/pub/release-115/variation/indexed_vep_cache/ (no need to install VEP itself)
 
 For plugins, comb through the exhaustive list on https://www.ensembl.org/info/docs/tools/vep/script/vep_plugins.html
 
@@ -35,7 +46,8 @@ sub feature_types {
     return ['Feature', 'Intergenic'];
 }
 
-## Command to run VEP - gives you an output directory with lead SNP subdirectory and all their high LD SNPs and their VEP results in tab columns 
+## STEP 2: Run VEP - gives you an output directory with lead SNP subdirectory and all their high LD SNPs and their VEP results in tab columns 
+
 ### For hg19, change the reference genome under the Docker command - keep in mind that most plugins do not work with hg19!
 nextflow run run_VEP.nf 
 --csvs '/home/kg522/data/Functional-Variants/LD_Expansion_Results/full_dataset/ld_results/*.csv' 
@@ -43,25 +55,25 @@ nextflow run run_VEP.nf
 --vep_out /home/kg522/data/Functional-Variants/[output_file]
 --vep_cache /home/kg522/data/ensembl-vep
 
-## You can filter VEP results with VEP - specify what you want to filter for (example: coding variants)
+### You can filter VEP results with VEP - specify what you want to filter for (example: coding variants)
 nextflow run filter_VEP.nf 
 --tsv_dir /home/kg522/data/Functional-Variants/VEP_case 
 --vep_filter_out /home/kg522/data/[output_file]
 
-## To merges the tsv files of tsv VEP results per variant, run this (gives one comprehensive csv file of all variants and their VEP columns)
-./merge_tsv_horizontal.sh [parent_directory] [output_file]
+### To merges the tsv files of tsv VEP results per variant, run this (gives one comprehensive csv file of all variants and their VEP columns)
+bash merge_tsv_files.sh [parent_directory] [output_file]
 
-## To select for particular variants and make a new directory with just those variants (for example, a subset of variants to run spliceAI on)
+### To select for particular variants and make a new directory with just those variants (for example, a subset of variants to run spliceAI on)
 
 This needs an input csv file of Lead SNP and high LD SNP coordinates compiled in a csv file (the code reads from these to find those vcf files)
 
-./filter_for_variants_vcf.sh <csv_file> <input_vcf_dir> <output_base_dir>
+bash filter_for_variants_vcf.sh <csv_file> <input_vcf_dir> <output_base_dir>
 
-# On filtered splice variants, run SpliceAI
+## STEP 3: Run SpliceAI on filtered splice variants
 
 First, SpliceAI needs to be installed. The simplest way to do this is with conda install -c bioconda spliceai. Alternatively, the github repository can be cloned git clone https://github.com/Illumina/SpliceAI.git
 
-tensorflow (>=1.2.0) also needs to be installed. 
+Dependencies: tensorflow (>=1.2.0)
 
 A reference genome file is also needed, available at http://hgdownload.cse.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz
 
