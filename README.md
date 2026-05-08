@@ -9,8 +9,11 @@ In a first step, a list of SNPs of Interest (csv file) is used as an input file.
 In a second step, variants (SNP list) are mapped to genes, transcripts and regulatory elements by leveraging VEP to read each variant and check where it maps on the genome, using Ensembl transcript models and determining consequences from sequence ontology terms. Various functions are incorporated to investigate: a. Protein Coding Variants b. Regulatory Element Annotation c. Transcription Factor Binding Sites
 ## Step 3: Molecular Impact Prediction 
 In this step, SpliceAI is used to predict splicing effects of variants under investigation. SpliceAI predicts change in splicing probabilities at each base in a sequence window of +/- 500kb. 
-## Step 4: Chromatin Analysis 
-ATAC etc 
-## Step 5: Multi-evidence scoring 
-Results from each step are summarised and displayed in output files including the scoring according to their evidence. 
+## Step 4: Chromatin Profiling
+Incorporate in-house or external dataset - ATAC, ChiP, Hi-C, etc. 
+## Step 5: Multi-evidence filtering 
+Gather evidence and score variants.
+
+<img width="4288" height="3426" alt="image" src="https://github.com/user-attachments/assets/d6027cc5-c6cc-4500-b766-c8e9c3169c1e" />
+
 
