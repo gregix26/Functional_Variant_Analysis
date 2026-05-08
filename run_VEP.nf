@@ -50,7 +50,7 @@ process MAKE_VCFS {
     
     echo "=== Processing ${csv.baseName} ==="
     
-    Rscript ${projectDir}/Functional-Annotation-VEP/convert_csvtovcf_kata.R
+    Rscript ${projectDir}/Functional-Annotation-VEP/dsSNP_hg38_csvtovcf.R 
     
     # Check if any VCFs were created
     vcf_count=\$(ls vcfs/*.vcf 2>/dev/null | wc -l)
@@ -95,10 +95,10 @@ process RUN_VEP {
     
     script:
     """
-    ${projectDir}/Functional-Annotation-VEP/run_VEP.sh \
+    ${projectDir}/Functional-Annotation-VEP/run_VEP_hg38.sh \
         ${vcf} \
         ${vcf.simpleName}.vep.tsv \
-        ${params.vep_cache} \
+        ${params.vep_cache} \ 
         ${params.vep_plugins} \
         ${params.vep_plugin_data}
     """
