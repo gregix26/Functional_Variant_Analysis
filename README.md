@@ -19,6 +19,9 @@ Compiling non-coding and regulatory variants, genomic location of variants need 
 ## Step 4: Scoring System
 Evidence from chromatin profiling analyses is scored and variants with highest functional evidence are prioritized.
 
+## Step 4.5: Visualizing
+Use pyGenomeTracks python package.
+
 ## Step 5: Transcription Factor Disruption Analysis
 Using the list of putatively functional variants, the reference and alternate sequences are scanned for TF motifs within a 20bp window. Delta score = REF - ALT motif score informs us about gained, lost, strengtened or weaked motifs that might disrupt the binding of TF families. For more complex analysis, consider using CRESted and TF-MINDI for cell-type-specific prediction of motif syntax disruption by prioritized variants.
 
