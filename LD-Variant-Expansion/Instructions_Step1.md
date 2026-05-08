@@ -1,4 +1,4 @@
-Capturing LD windows
+Expanding the list of SNPs 
 - Uses ensemblLD (1000G phase 3) in poulation-specific manner (EUR)
 - r^2 threshold explicitly defined as 0.7 
 - window-based LD expansion (500kb) 
