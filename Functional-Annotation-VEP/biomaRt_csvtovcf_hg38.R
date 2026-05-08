@@ -20,35 +20,74 @@ if (length(csv_files) == 0) {
   stop("No CSV files found in directory: ", csv_dir)
 }
 
-# -------- helper: connect to Ensembl with host fallbacks --------
+# -------- helper: connect to Ensembl with mirror/SSL fallbacks --------
 # Called fresh for each CSV to avoid stale sessions.
-# GRCh38 is the default/current assembly.
-# The mirror argument cannot be combined with GRCh/version, so we use
-# useMart() with explicit hosts instead of useEnsembl() + mirror.
+# GRCh38 is the default/current assembly for hsapiens_snp.
 connect_ensembl <- function() {
-  hosts <- c(
-    "https://www.ensembl.org",
-    "https://uswest.ensembl.org",
-    "https://useast.ensembl.org",
-    "https://asia.ensembl.org"
+  mirrors <- c(NA, "www", "useast", "asia")
+  archive_versions <- c(115)
+  ssl_fixes <- list(
+    NULL,
+    list(ssl_verifypeer = 0L),
+    list(ssl_cipher_list = "DEFAULT@SECLEVEL=1")
   )
   
-  for (host in hosts) {
-    cat("  Trying Ensembl host:", host, "\n")
-    ensembl <- tryCatch({
-      useMart(
-        biomart = "ENSEMBL_MART_SNP",
-        dataset = "hsapiens_snp",
-        host    = host
-      )
-    }, error = function(e) {
-      cat("  Failed to connect to", host, ":", e$message, "\n")
-      NULL
-    })
+  for (ssl_fix in ssl_fixes) {
+    if (is.null(ssl_fix)) {
+      cat("  Trying default SSL settings\n")
+    } else {
+      cat("  Applying SSL fallback:", paste(names(ssl_fix), ssl_fix, sep = "="), "\n")
+      tryCatch({
+        setEnsemblSSL(ssl_fix)
+      }, error = function(e) {
+        cat("  Warning: Could not set SSL fallback:", e$message, "\n")
+      })
+    }
     
-    if (!is.null(ensembl)) {
-      cat("  Successfully connected via", host, "\n")
-      return(ensembl)
+    for (mirror in mirrors) {
+      label <- if (is.na(mirror)) "default" else mirror
+      cat("  Trying Ensembl mirror:", label, "\n")
+      ensembl <- tryCatch({
+        if (is.na(mirror)) {
+          useEnsembl(
+            biomart = "snps",
+            dataset = "hsapiens_snp"
+          )
+        } else {
+          useEnsembl(
+            biomart = "snps",
+            dataset = "hsapiens_snp",
+            mirror  = mirror
+          )
+        }
+      }, error = function(e) {
+        cat("  Failed to connect via", label, ":", e$message, "\n")
+        NULL
+      })
+      
+      if (!is.null(ensembl)) {
+        cat("  Successfully connected via", label, "\n")
+        return(ensembl)
+      }
+    }
+    
+    for (version in archive_versions) {
+      cat("  Trying Ensembl archive version:", version, "\n")
+      ensembl <- tryCatch({
+        useEnsembl(
+          biomart = "snps",
+          dataset = "hsapiens_snp",
+          version = version
+        )
+      }, error = function(e) {
+        cat("  Failed to connect via archive version", version, ":", e$message, "\n")
+        NULL
+      })
+      
+      if (!is.null(ensembl)) {
+        cat("  Successfully connected via archive version", version, "\n")
+        return(ensembl)
+      }
     }
   }
   
@@ -146,7 +185,7 @@ for (csv in csv_files) {
   # ---- Query Ensembl in chunks with retry ----
   cat("  Querying Ensembl for SNP information...\n")
   
-  chunk_size  <- 20
+  chunk_size  <- 5
   max_retries <- 3
   all_snp_info <- NULL
   
