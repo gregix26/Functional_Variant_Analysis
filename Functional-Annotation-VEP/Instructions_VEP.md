@@ -69,13 +69,15 @@ This needs an input csv file of Lead SNP and high LD SNP coordinates compiled in
 
 bash filter_for_variants_vcf.sh <csv_file> <input_vcf_dir> <output_base_dir>
 
-## STEP 3: Run SpliceAI on filtered splice variants
+## STEP 3: Run SpliceAI on variants
 
 First, SpliceAI needs to be installed. The simplest way to do this is with conda install -c bioconda spliceai. Alternatively, the github repository can be cloned git clone https://github.com/Illumina/SpliceAI.git
 
 Dependencies: tensorflow (>=1.2.0)
 
 A reference genome file is also needed, available at http://hgdownload.cse.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz
+
+Follow instruction from developers.
 
 
 
